@@ -1,0 +1,63 @@
+                        <!--</div>
+                    <!-- /.col-lg-12 -->
+                <!--</div>
+                <!-- /.row -->
+            </div>
+            <!-- /.container-fluid -->
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="js/jquery-1.12.4.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="vendor/metisMenu/metisMenu.min.js"></script>
+
+    <% if (title === '最新資訊' || title === '裝置列表') { %>
+        <!-- JQUERY DataTables-->
+        <script type="text/javascript" src="vendor/DataTables-1.10.13/media/js/jquery.dataTables.min.js"></script>
+        <!-- Button DataTables-->
+        <script type="text/javascript" src="vendor/DataTables-1.10.13/extensions/Buttons/js/dataTables.buttons.min.js"></script>
+         <!-- Button DataTables-->
+        <script type="text/javascript" src="vendor/DataTables-1.10.13/extensions/Buttons/js/buttons.flash.min.js"></script>
+        <!-- JZIP -->
+        <script type="text/javascript" src="vendor\DataTables-1.10.13\jszip.min.js"></script>
+        <!-- PDF MAKE -->
+        <script type="text/javascript" src="vendor\DataTables-1.10.13\pdfmake.min.js"></script>
+        <!-- VFS FONT -->
+        <script type="text/javascript" src="vendor\DataTables-1.10.13\vfs_fonts.js"></script>
+        <!-- BUTTON HTML5 -->
+        <script type="text/javascript" src="/js/bootstrap-waitingfor.min.js"></script>
+        <!-- WAITING DIALOG -->
+        <script type="text/javascript" src="vendor/DataTables-1.10.13/extensions/Buttons/js/buttons.html5.min.js"></script>
+    <% } %>
+
+    <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>-->
+    <!--  JSCal2-1.7-->
+    <script type="text/javascript" src="/vendor/JSCal2-1.7/js/jscal2.js"></script>
+    <script type="text/javascript" src="/vendor/JSCal2-1.7/js/lang/b5.js"></script>
+    <script src="js/sb-admin-2.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- Self-define -->
+    <% if (title === '首頁') { %>
+        <!-- Morris Charts JavaScript -->
+    <% } else if (title === '最新資訊') { %>
+        <script type="text/javascript" src="js/myIndex.js" ></script>
+    <% } else if(title === '裝置列表') { %>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+        <script type="text/javascript" src="/js/utils.js"></script>
+        <script type="text/javascript" src="js/myDevice.js" ></script>
+    <% } %>
+
+    <!-- Custom Theme JavaScript -->
+    
+
+</body>
+
+</html>

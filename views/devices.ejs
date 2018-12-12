@@ -1,0 +1,46 @@
+<%- include extend/sb_header %>
+
+	<div id="page-inner">
+             <div class="row">
+                <div class="col-md-12">
+                    <!--<div class="col-md-2">
+                      <button type="button" id="back" name="back" class="btn btn-primary btn-sm" onClick="back()">
+                        <img src="icons/back.png" width="ˇ30" height="30"/> Back
+                      </button>
+                    </div>-->
+                    <div class="col-md-12">
+                        <h2><span id="device_mac"><%= mac %></span></h2>
+                    </div>
+
+                    <div class="col-md-12 column">
+
+                      <table id="table1" class="display" cellspacing="0" width="100%">
+                                  <thead>
+                                      <tr style="color:#428bca">
+                                        <th>項目</th>
+                                        <th>時間</th>
+                                        <th>資料</th>
+                                        <th>溫度</th>
+                                        <th>濕度</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                      <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                      </tr>
+                                  </tbody>
+                              </table>
+                    </div>
+                </div>
+          </div>
+          <input id="mac" name="mac" value="<%= mac%>" type="hidden">
+          <input id="date" name="date" value="<%= date%>" type="hidden" >
+          <input id="option" name="option" value="<%= option%>" type="hidden" >
+          <!-- /. ROW  -->
+        </div>
+
+<%- include extend/sb_footer %>
