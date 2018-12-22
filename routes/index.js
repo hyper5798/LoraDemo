@@ -4,15 +4,13 @@ var Device = require('../models/device.js');
 var settings = require('../settings');
 var JsonFileTools =  require('../models/jsonFileTools.js');
 var path = './public/data/finalList.json';
-var path2 = './public/data/test.json';
+var path2 = './public/data/checkMap.json';
 var hour = 60*60*1000;
 var test = true;
 
 
 module.exports = function(app) {
   app.get('/', function (req, res) {
-		var testObj = JsonFileTools.getJsonFromFile(path2);
-		test = testObj.test;
 		var now = new Date().getTime();
 		var device = null,
 			finalList = null;
@@ -34,17 +32,14 @@ module.exports = function(app) {
 		res.render('index', {
 			title: '首頁',
 			device: device,
-			finalList: finalList,
-			test: test
+			finalList: finalList
 		});
   });
 
   app.get('/update', function (req, res) {
 		var finalList = JsonFileTools.getJsonFromFile(path);
 		var keys = Object.keys(finalList);
-		var testObj = JsonFileTools.getJsonFromFile(path2);
 		var device = null;
-		test = testObj.test;
 		if( keys.length > 0) {
 			console.log(keys[0]);
 		  console.log(finalList[keys[0]]);
@@ -53,14 +48,11 @@ module.exports = function(app) {
 
 		res.render('update', {
 			title: '更新',
-			device: device,
-			test: test
+			device: device
 		});
   });
 
   app.get('/find', function (req, res) {
-	var testObj = JsonFileTools.getJsonFromFile(path2);
-	test = testObj.test;
 	console.log('render to post.ejs');
 	var find_mac = req.flash('mac').toString();
 	var successMessae,errorMessae;
@@ -87,8 +79,7 @@ module.exports = function(app) {
 				successMessae = '找到'+devices.length+'筆資料';
 				res.render('find', {
 					title: '查詢',
-					devices: devices,
-					test:test
+					devices: devices
 				});
 			}else{
 				console.log('找不到資料!');
@@ -102,8 +93,7 @@ module.exports = function(app) {
 		console.log('find_name.length=0');
 		res.render('find', {
 			title: '查詢',
-			devices: null,
-			test:test
+			devices: null
 	  });
 	}
 
@@ -129,8 +119,6 @@ module.exports = function(app) {
 
   // Jason add on 2017.11.16
   app.get('/finalList', function (req, res) {
-		var testObj = JsonFileTools.getJsonFromFile(path2);
-		test = testObj.test;
 		var now = new Date().getTime();
 		var device = null,
 			finalList = null;
@@ -152,8 +140,7 @@ module.exports = function(app) {
 		
 		res.render('finalList', {
 			title: '最新資訊',
-			finalList:finalList,
-			test: test
+			finalList:finalList
 		});
   });
 
@@ -161,11 +148,32 @@ module.exports = function(app) {
 		var	mac = req.query.mac;
 		var	date = req.query.date;
 		var	option = req.query.option;
-		var testObj = JsonFileTools.getJsonFromFile(path2);
-		test = testObj.test;
+		var checkMap = null;
+		var finalList = null;
+		try{
+			finalList = JsonFileTools.getJsonFromFile(path);
+	    } catch(e) {
+	        console.log('Get finalList error : ' + e);
+	        finalList = {};
+	        JsonFileTools.saveJsonToFile(path, finalList);
+	    }
+	    if (finalList === null) {
+	        finalList = {};
+		}
+		checkMap = JsonFileTools.getJsonFromFile(path2);
+		let obj = finalList[mac];
+		var keys = Object.keys(obj.information);
+		let type = obj.type;
+		let fieldName = checkMap[type]['fieldName'];
+		let field = [];
+		for(let i=0; i<keys.length;i++) {
+			field.push(fieldName[keys[i]]);
+		}
+        
 
 		res.render('devices', {
 			title: '裝置列表',
+			field: field,
 			mac:mac,
 			date: date,
 			test: test,

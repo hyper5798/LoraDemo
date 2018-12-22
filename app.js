@@ -100,7 +100,8 @@ var setting = {
     functionGlobalContext: {
       momentModule:require("moment"),
       deviceDbTools:require("./models/device.js"),
-      msgTools:require("./models/msgTools.js")
+      msgTools:require("./models/msgTools.js"),
+      util: require('./models/util.js')
     }    // enables global context
 };
 

@@ -13,3 +13,7 @@ index.ejs and finalList.ejs
 3.node app.js
 4.http://localhost:3000 (to home page)
 5.http://localhost:3000/red (to start Node-Red)
+
+## 0.0.1
+1.Add map module for mongodb
+2.Add map flow for add device map

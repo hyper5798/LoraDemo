@@ -10,6 +10,18 @@ var finalList = {};
 var linebot = require('linebot');
 var settings = require('../settings');
 
+init();
+
+module.exports = {
+    parseMsg,
+    setFinalList,
+    saveFinalListToFile,
+    getFinalList,
+	saveSetting,
+    getTabledata,
+    getSetting,
+    sendLineMessage
+}
 
 function init(){
     try{
@@ -23,8 +35,6 @@ function init(){
         finalList = {};
     }
 }
-
-init();
 
 function parseMsg (obj) {
     //Get data attributes
@@ -40,7 +50,8 @@ function parseMsg (obj) {
     var msg = {macAddr: mMac, data: mData, recv: mRecv, date: mDate,
                 information: mInfo, timestamp: mTimestamp};
     finalList[mMac]=msg;
-    saveFinalListToFile ();return msg;
+    saveFinalListToFile ();
+    return msg;
     
 }
 
@@ -164,13 +175,4 @@ function sendLineMessage (msg) {
     }
 }
 
-module.exports = {
-    parseMsg,
-    setFinalList,
-    saveFinalListToFile,
-    getFinalList,
-	saveSetting,
-    getTabledata,
-    getSetting,
-    sendLineMessage
-}
+

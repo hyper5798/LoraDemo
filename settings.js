@@ -1,4 +1,5 @@
 module.exports = {
+  debug: true,
   cookieSecret: 'mydemo',
   db: 'demo',
   host: 'localhost',
@@ -13,5 +14,7 @@ module.exports = {
   gIoTopic:'client/200000206/200000206-GIOT-MAKER',
   channelId: '',
   channelSecret: '',
-  channelAccessToken: ''
+  channelAccessToken: '',
+  //Zone
+  timezone: 'Asia/Taipei'
 };

@@ -18,8 +18,8 @@ ws = new WebSocket(wsUri);
         if(msg.id === 'change_table'){
             //Remove init button active
             var mac = document.getElementById("mac").value;
-            // console.log("current mac : "+ mac);
-            // console.log("feedback mac : "+ msg.mac);
+            console.log("current mac : "+ mac);
+            console.log("feedback mac : "+ msg.mac);
             if(mac !== msg.mac) {
                 return;
             }

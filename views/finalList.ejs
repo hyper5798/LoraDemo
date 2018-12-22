@@ -29,9 +29,8 @@
 			<th>項目</th>
 			<th>裝置識別編號</th>
 			<th>日期</th>
-			<th>溫度</th>
-			<th>濕度</th>
-			<th>Status</th>
+			<th>裝置類型</th>
+			<th>狀態</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -40,8 +39,7 @@
 					<td><%= i+1%></td>
 					<td><%= finalList[keys[i]].macAddr%></td>
 					<td><%= finalList[keys[i]].date%></td>
-					<td><%= finalList[keys[i]].information.temperature%></td>
-					<td><%= finalList[keys[i]].information.humidity%></td>
+					<td><%= finalList[keys[i]].typeName%></td>
 					<td>
 					<% if(finalList[keys[i]].overtimr){ %>
 						<img src="/icons/connection_fail.png" width="ˇ30" height="30" name="status">

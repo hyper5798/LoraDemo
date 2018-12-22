@@ -20,19 +20,11 @@
                                         <th>項目</th>
                                         <th>時間</th>
                                         <th>資料</th>
-                                        <th>溫度</th>
-                                        <th>濕度</th>
+                                        <% for(var i=0;i<field.length ;i++){ %>
+                                            <th><%= field[i] %></th>
+                                        <% } %>
                                       </tr>
                                   </thead>
-                                  <tbody>
-                                      <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                      </tr>
-                                  </tbody>
                               </table>
                     </div>
                 </div>
