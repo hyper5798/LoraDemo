@@ -88,7 +88,11 @@
                     <div class="col-lg-12">-->
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header"><%= title %></h1>
+                        <% if (title === '裝置列表') { %>
+                            <h1 class="page-header"><a href="/finalList"> 最新資訊</a> >> <%= mac %> </h1>
+                        <% } else { %>
+                            <h1 class="page-header"><%= title %></h1>
+                        <% } %>    
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>

@@ -2,6 +2,16 @@
 	<% if(finalList === null){ %>
 	    尚無上報資料
 	<% }else{ %>
+		<!-- Select Map -->
+		<div class="col-md-3">
+			<label>裝置類型</label>
+			<select  onChange= "changeMap(this.options[this.selectedIndex].value)">
+				<% for(var i=0;i<maps.length ;i++){ %>
+				    <option value="<%=  maps[i].deviceType%>" selected><%=  maps[i].typeName%></option>
+			    <% } %>
+			</select>
+		</div> <!-- col-md-3 -->
+
 		<!-- Select Date -->
 		<div class="col-md-3">
 			<label>選擇日期</label>
@@ -10,18 +20,17 @@
 		</div>
 
 		<!-- Select Range -->
-		<div class="col-md-9">
+		<div class="col-md-6">
 			<label>查詢範圍</label>
-			<select "selected_time" id="option" name="option">
+			<select id="option" name="option">
 				<option value="0" selected>一天</option>
 				<option value="1">一周</option>
 				<option value="2">一月</option>
 			</select>
-		</div> <!-- col-md-3 -->
+		</div> <!-- col-md-6 -->
 		<br>
 		<hr>
 
-		<% var keys = Object.keys(finalList); %>
 		<div class="col-md-12">
 			<table id="table1"  class="display" cellspacing="0" width="100%">
 		<thead>
@@ -34,14 +43,14 @@
 			</tr>
 		</thead>
 		<tbody>
-			<% for(var i=0;i<keys.length ;i++){ %>
+			<% for(var i=0;i<finalList.length ;i++){ %>
 				<tr>
 					<td><%= i+1%></td>
-					<td><%= finalList[keys[i]].macAddr%></td>
-					<td><%= finalList[keys[i]].date%></td>
-					<td><%= finalList[keys[i]].typeName%></td>
+					<td><%= finalList[i].macAddr%></td>
+					<td><%= finalList[i].date%></td>
+					<td><%= finalList[i].typeName%></td>
 					<td>
-					<% if(finalList[keys[i]].overtimr){ %>
+					<% if(finalList[i].overtimr){ %>
 						<img src="/icons/connection_fail.png" width="ˇ30" height="30" name="status">
 					<% }else{ %>
 						<img src="/icons/connection_ok.png" width="30" height="30" name="status">
@@ -51,6 +60,8 @@
 			<% } %>
 		</tbody>
 	</table>
+	<input id="devices" name="devices" value="<%= JSON.stringify(devices)%>" type="hidden">
+	<input id="maps" name="maps" value="<%= JSON.stringify(devices)%>" type="hidden">
 		</div>
 
 		

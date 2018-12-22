@@ -36,75 +36,6 @@ module.exports = function(app) {
 		});
   });
 
-  app.get('/update', function (req, res) {
-		var finalList = JsonFileTools.getJsonFromFile(path);
-		var keys = Object.keys(finalList);
-		var device = null;
-		if( keys.length > 0) {
-			console.log(keys[0]);
-		  console.log(finalList[keys[0]]);
-			device = finalList[keys[0]];
-		}
-
-		res.render('update', {
-			title: '更新',
-			device: device
-		});
-  });
-
-  app.get('/find', function (req, res) {
-	console.log('render to post.ejs');
-	var find_mac = req.flash('mac').toString();
-	var successMessae,errorMessae;
-	var count = 0;
-	console.log('mac:'+find_mac);
-
-	if(find_mac.length>0){
-		console.log('find_mac.length>0');
-		Device.findByMac(find_mac , function(err,devices){
-			if(err){
-				console.log('find name:'+find_mac);
-				req.flash('error', err);
-				return res.redirect('/find');
-			}
-			console.log("find all of mac "+find_mac+" : "+devices);
-			devices.forEach(function(device) {
-
-				console.log('mac:'+device.macAddr + ', information :' + JSON.stringify(device.information));
-				count = count +1;
-			});
-
-			if (devices.length>0) {
-				console.log('find '+devices.length+' records');
-				successMessae = '找到'+devices.length+'筆資料';
-				res.render('find', {
-					title: '查詢',
-					devices: devices
-				});
-			}else{
-				console.log('找不到資料!');
-				errorMessae = '找不到資料!';
-				req.flash('error', err);
-      			return res.redirect('/find');
-	  		}
-
-    	});
-	}else{
-		console.log('find_name.length=0');
-		res.render('find', {
-			title: '查詢',
-			devices: null
-	  });
-	}
-
-  });
-  app.post('/find', function (req, res) {
-		var	 post_mac = req.body.mac;
-		console.log('find mac:'+post_mac);
-		req.flash('mac', post_mac);
-		return res.redirect('/find');
-  });
-
   app.get('/setting', function (req, res) {
 		res.render('setting', {
 			title: '設定'
@@ -119,8 +50,8 @@ module.exports = function(app) {
 
   // Jason add on 2017.11.16
   app.get('/finalList', function (req, res) {
-		var now = new Date().getTime();
-		var device = null,
+		var devices = {},
+		    selectedType = null,
 			finalList = null;
 		try{
 	        finalList = JsonFileTools.getJsonFromFile(path);
@@ -131,16 +62,30 @@ module.exports = function(app) {
 	    }
 	    if (finalList === null) {
 	        finalList = {};
-	    }
-
-		var keys = Object.keys(finalList);
-		if (keys.length > 0) {
-			device = finalList[keys[0]];
 		}
-		
+		var checkMap = JsonFileTools.getJsonFromFile(path2);
+		var maps = Object.values(checkMap);
+
+		var keys2 = Object.keys(finalList);
+		for(let i=0;i < keys2.length; i++) {
+			let mac = keys2[i];
+			
+			let obj = finalList[mac];
+			let type = obj.type;
+			if(i==0){
+				selectedType = type;
+			}
+			if(devices[type] === undefined) {
+				devices[type] = [];
+			}
+			devices[type].push(obj);
+		}
+
 		res.render('finalList', {
 			title: '最新資訊',
-			finalList:finalList
+			finalList: devices[selectedType],
+			devices: devices,
+			maps: maps
 		});
   });
 

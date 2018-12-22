@@ -1,4 +1,7 @@
 console.log("My Index");
+var table = null;
+var maps = JSON.parse(document.getElementById("maps").value);
+var devices = JSON.parse(document.getElementById("devices").value);
 
 var opt={   "iDisplayLength": 25,
             "oLanguage":{"sProcessing":"處理中...",
@@ -19,6 +22,55 @@ var opt2={
      "order": [[ 2, "desc" ]],
      "iDisplayLength": 25
  };
+
+ function changeMap(value) {
+    table.fnClearTable();
+    let list = [];
+    let data = getTabledata(devices[value]);
+    if(data && data.length > 0){
+        table.fnAddData(data);
+        table.$('tr').click(function() {
+        var row=table.fnGetData(this);
+            toSecondTable(row[1]);
+        });
+    }
+ }
+
+ function getTabledata (lists) {
+    var mItem = 1;
+    var array = [];
+    // alert(lists.length);
+
+    for (var i=0;i<lists.length;i++)
+    {
+        array.push(getArray(lists[i],mItem));
+        mItem++;
+    }
+    return array;
+}
+
+function getArray (obj,item){
+    var arr = [];
+    if(item<10){
+        arr.push('0'+item);
+    }else{
+        arr.push(item.toString());
+    }
+
+    let last = new Date(obj.date).getTime();
+    let now = new Date().getTime();
+    let check = ( now - last)/(3600*1000); 
+    arr.push(obj.macAddr);
+    arr.push(obj.date);
+    arr.push(obj.typeName);
+    if(check > 2) {
+        arr.push('<img src="/icons/connection_fail.png" width="ˇ30" height="30" name="status">');
+    } else {
+        arr.push('<img src="/icons/connection_ok.png" width="30" height="30" name="status">');
+    }
+    
+    return arr ;
+}
 
 function toSecondTable(mac){
     console.log("mac :"+mac);
@@ -78,7 +130,7 @@ $(document).ready(function(){
         showTime: false,
         onSelect: function() {this.hide();}
     });
-    var table = $("#table1").dataTable(opt);
+    table = $("#table1").dataTable(opt);
     table.$('tr').click(function() {
         var row=table.fnGetData(this);
         toSecondTable(row[1]);
