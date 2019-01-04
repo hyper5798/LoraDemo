@@ -40,9 +40,6 @@ function parseMsg (obj) {
     //Get data attributes
     mData = obj.data;
     mMac  = obj.macAddr;
-    /*if(mMac !== '05010326') {
-        return null;
-    }*/
     mRecv = obj.recv;
     mDate = moment(mRecv).format('YYYY/MM/DD HH:mm:ss');
     mTimestamp = new Date(mRecv).getTime();

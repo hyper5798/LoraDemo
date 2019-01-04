@@ -8,6 +8,61 @@ if(location.protocol=="https:"){
 }
 var ws=null;
 
+//Jason ad on 2018.12.26 for chart -- start 
+var timeFormat = 'YYYY-MM-DD HH:mm';
+
+function newDate(days) {
+    return moment().add(days, 'hours').toDate();
+}
+
+function newDateString(days) {
+    return moment().add(days, 'hours').format(timeFormat);
+}
+
+var color = Chart.helpers.color;
+var config = {
+    type: 'line',
+    data: {
+        labels: [],
+        datasets: []
+    },
+    options: {
+        title: {
+            text: 'Chart.js Time Scale'
+},
+tooltips: {
+    mode: 'index'
+},
+hover: {
+    mode: 'index'
+},
+        scales: {
+            xAxes: [{
+                type: 'time',
+                time: {
+                    parser: timeFormat,
+                    // round: 'day'
+                    tooltipFormat: 'll HH:mm'
+                },
+                scaleLabel: {
+                    display: false,
+                    labelString: 'Date'
+                }
+            }],
+            yAxes: [{
+    ticks: {
+        beginAtZero: true
+    },
+                scaleLabel: {
+                    display: false,
+                    labelString: 'value'
+                }
+            }]
+        },
+    }
+};
+//Jason ad on 2018.12.26 for chart -- end 
+
 function wsConn() {
 ws = new WebSocket(wsUri);
     ws.onmessage = function(m) {
@@ -113,6 +168,7 @@ function showDialog(){
 
 $(document).ready(function(){
     showDialog();
+    
     var opt={"oLanguage":{"sProcessing":"處理中...",
             "sLengthMenu":"顯示 _MENU_ 項結果",
             "sZeroRecords":"沒有匹配結果",
@@ -152,4 +208,7 @@ $(document).ready(function(){
             ]
     };
     $("#table1").dataTable(opt);
+
+    var ctx = document.getElementById('canvas').getContext('2d');
+	window.myLine = new Chart(ctx, config);
 });

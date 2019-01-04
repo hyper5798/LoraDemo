@@ -82,7 +82,7 @@ function toSecondTable(mac){
     } else if (date === myDate) {
         date = myDate + ' ' + myTime;
     } else {
-        date = date + '23:59:59';
+        date = date + ' 23:59:59';
     }
     var option = document.getElementById("option").value;
     
