@@ -27,12 +27,13 @@
                     </div>
                 </div>
                 <div class="col-md-12">
-                  <canvas id="canvas"></canvas>
+                  <div id="main" style="width: 100%;height:600px;"></div>
                 </div>
           </div>
           <input id="mac" name="mac" value="<%= mac%>" type="hidden">
           <input id="date" name="date" value="<%= date%>" type="hidden" >
           <input id="option" name="option" value="<%= option%>" type="hidden" >
+          <input id="field" name="field" value="<%= JSON.stringify(field)%>" type="hidden" >
           <!-- /. ROW  -->
         </div>
 

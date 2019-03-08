@@ -1,4 +1,6 @@
 console.log("Node admin device information");
+var field  = JSON.parse(document.getElementById("field").value);
+console.log("$$$$ field :", JSON.stringify(field));
 var connected = false;
 var table;
 if(location.protocol=="https:"){
@@ -6,102 +8,116 @@ if(location.protocol=="https:"){
 } else {
     var wsUri="ws://"+window.location.hostname+":3000/ws/devices";
 }
-var ws=null;
 
-//Jason ad on 2018.12.26 for chart -- start 
-var timeFormat = 'YYYY-MM-DD HH:mm';
+var myChart = echarts.init(document.getElementById('main'));
 
-function newDate(days) {
-    return moment().add(days, 'hours').toDate();
-}
-
-function newDateString(days) {
-    return moment().add(days, 'hours').format(timeFormat);
-}
-
-var color = Chart.helpers.color;
-var config = {
-    type: 'line',
-    data: {
-        labels: [],
-        datasets: []
+// 指定图表的配置项和数据
+let lineOption = {
+    title: {
+        text: '折线图堆叠'
     },
-    options: {
-        title: {
-            text: 'Chart.js Time Scale'
-},
-tooltips: {
-    mode: 'index'
-},
-hover: {
-    mode: 'index'
-},
-        scales: {
-            xAxes: [{
-                type: 'time',
-                time: {
-                    parser: timeFormat,
-                    // round: 'day'
-                    tooltipFormat: 'll HH:mm'
-                },
-                scaleLabel: {
-                    display: false,
-                    labelString: 'Date'
-                }
-            }],
-            yAxes: [{
-    ticks: {
-        beginAtZero: true
+    tooltip: {
+        trigger: 'axis'
     },
-                scaleLabel: {
-                    display: false,
-                    labelString: 'value'
-                }
-            }]
+    legend: {
+        data:[/*'邮件营销','联盟广告','视频广告','直接访问','搜索引擎'*/]
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+    },
+    toolbox: {
+        feature: {
+            saveAsImage: {}
+        }
+    },
+    xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        data: [/*  '周一','周二','周三','周四','周五','周六','周日'*/]
+    },
+    yAxis: {
+        type: 'value'
+    },
+    series: [
+        /* {
+            name:'邮件营销',
+            type:'line',
+            stack: '总量',
+            data:[120, 132, 101, 134, 90, 230, 210]
         },
-    }
+        {
+            name:'联盟广告',
+            type:'line',
+            stack: '总量',
+            data:[220, 182, 191, 234, 290, 330, 310]
+        },
+        {
+            name:'视频广告',
+            type:'line',
+            stack: '总量',
+            data:[150, 232, 201, 154, 190, 330, 410]
+        },
+        {
+            name:'直接访问',
+            type:'line',
+            stack: '总量',
+            data:[320, 332, 301, 334, 390, 330, 320]
+        },
+        {
+            name:'搜索引擎',
+            type:'line',
+            stack: '总量',
+            data:[820, 932, 901, 934, 1290, 1330, 1320]
+        } */
+    ] 
 };
-//Jason ad on 2018.12.26 for chart -- end 
+
+// 使用刚指定的配置项和数据显示图表。
+// myChart.setOption(lineOption);
+
+var ws=null;
+wsConn(); 
 
 function wsConn() {
-ws = new WebSocket(wsUri);
+    ws = new WebSocket(wsUri);
     ws.onmessage = function(m) {
         //console.log('< from-node-red:',m.data);
         if (typeof(m.data) === "string" && m. data !== null){
-        var msg =JSON.parse(m.data);
-        console.log("from-node-red : id:"+msg.id);
-        if(msg.id === 'change_table'){
-            //Remove init button active
-            var mac = document.getElementById("mac").value;
-            console.log("current mac : "+ mac);
-            console.log("feedback mac : "+ msg.mac);
-            if(mac !== msg.mac) {
-                return;
-            }
-            
-            console.log("v : "+ JSON.stringify(msg.v));
+            var msg =JSON.parse(m.data);
+            console.log("from-node-red : id:"+msg.id);
+            if(msg.id === 'change_table'){
+                //Remove init button active
+                var mac = document.getElementById("mac").value;
+                console.log("current mac : "+ mac);
+                console.log("feedback mac : "+ msg.mac);
+                if(mac !== msg.mac) {
+                    return;
+                }
+                
+                console.log("v : "+ JSON.stringify(msg.v));
 
-            //Reload table data
-            console.log("v type:"+typeof(msg.v));
-            table = $('#table1').dataTable();
-            table.fnClearTable();
-            var data = msg.v;
-            if (typeof(msg.v) !== 'object') {
-                data = JSON.parse(msg.v);
-            }
+                //Reload table data
+                console.log("v type:"+typeof(msg.v));
+                table = $('#table1').dataTable();
+                table.fnClearTable();
+                var data = msg.v;
+                if (typeof(msg.v) !== 'object') {
+                    data = JSON.parse(msg.v);
+                }
+                console.log("$$$$ data :", JSON.stringify(data));
+                toSetChart(data);
 
-            if(data && data.length > 0){
-                table.fnAddData(data);
-                table.$('tr').click(function() {
-                var row=table.fnGetData(this);
-                    toSecondTable(row[1]);
-                });
-            }
-            waitingDialog.hide();
-        }else if(msg.id === 'init_btn'){
-            //Set init button active
-            console.log("type:"+typeof(msg.v)+" = "+ msg.v);
-            type = msg.v;
+                if(data && data.length > 0){
+                    table.fnAddData(data);
+                    table.$('tr').click(function() {
+                    var row=table.fnGetData(this);
+                        toSecondTable(row[1]);
+                    });
+                }
+                waitingDialog.hide();
             }
         }
     }
@@ -109,7 +125,7 @@ ws = new WebSocket(wsUri);
 
         var mac = document.getElementById("mac").value;
         var date  = document.getElementById("date").value;
-        var option  = document.getElementById("option").value;;
+        var option  = document.getElementById("option").valu
         console.log('date :'+ date);
         connected = true;
         var obj = {"id":"init", "v": {mac: mac, date: date, option: option}};
@@ -129,13 +145,51 @@ ws = new WebSocket(wsUri);
         console.log("connection error");
     }
 }
-wsConn();           // connect to Node-RED server
 
-function setButton(_id,_v){ // update slider
-myselect = $("#"+_id);
-    myselect.val(_v);
-    myselect.slider('refresh');
+function toSetChart(list) {
+    console.log("$$$$ toSetChart");
+    let myOption = JSON.parse(JSON.stringify(lineOption)); //複製lineOption
+    let timeArr = [];
+    let seriesArr = [];
+    let seriesData = [];
+
+    //將所有資料列表取得時間跟感測器所有參數集合
+    list.forEach(function(item) {
+        console.log("item :", JSON.stringify(item));
+        //從時間欄逐一加入時間陣列中
+        timeArr.push(item[1]);
+        //從參數欄位開始逐一加入感測器所有參數集合中
+        for(let j=0; j < field.length; j++) {
+            if(seriesData[j] == undefined) {
+                seriesData[j] = []; 
+            }
+            console.log("item :",j);
+            console.log(item[j+3]);
+            (seriesData[j]).push(item[j+3]);
+        }
+    });
+
+    for(let i=0; i < field.length; i++) {
+        // console.log(item);
+
+        
+        let tmp = {
+            name: field[i],
+            type:'line',
+            data: seriesData[i] //將資料從感測器所有參數集合中取出
+        };
+        if(field[i] != "電壓") {
+            seriesArr.push(tmp);
+        }
+    }
+
+    // console.log("seriesArr : ", JSON.stringify(seriesArr));
+    myOption.legend.data = JSON.parse(JSON.stringify(field));//複製field 到 
+    myOption.xAxis.data = timeArr;
+    myOption.series = seriesArr;
+    myChart.setOption(myOption);
 }
+
 
 function myFunction(id){  // update device
     console.log(id);
@@ -149,7 +203,6 @@ function myFunction(id){  // update device
     //console.log("ws.onopen : "+ objString);
     ws.send(objString);     // Request ui status from NR
     console.log("sent change_type requeset");
-
 }
 
 function back(){
@@ -164,7 +217,6 @@ function showDialog(){
     waitingDialog.hide();
     }, 10000);
 }
-
 
 $(document).ready(function(){
     showDialog();
@@ -208,7 +260,5 @@ $(document).ready(function(){
             ]
     };
     $("#table1").dataTable(opt);
-
-    var ctx = document.getElementById('canvas').getContext('2d');
-	window.myLine = new Chart(ctx, config);
 });
+

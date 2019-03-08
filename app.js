@@ -79,6 +79,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/scripts', express.static(__dirname + '/node_modules/echarts/dist/'));
 app.use('/api', api);
 app.use(session({
   secret: settings.cookieSecret,
